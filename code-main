@@ -1,0 +1,36 @@
+#include <Windows.h>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <numeric>
+#include <opencv2/opencv.hpp>
+#include "ScreenCapture.h"
+
+// ========== 基本操作 ==========
+void SendKey(WORD key) {
+    INPUT input = {0};
+    input.type = INPUT_KEYBOARD;
+    input.ki.wVk = key;
+    SendInput(1, &input, sizeof(INPUT));
+    input.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1, &input, sizeof(INPUT));
+}
+
+void RapidPressKey(WORD key, int count = 5, int intervalMs = 16) {
+    for (int i = 0; i < count; ++i) {
+        SendKey(key);
+        Sleep(intervalMs);
+    }
+}
+
+// ========== テトリス操作 ==========
+void MoveLeft(int times)  { for (int i = 0; i < times; ++i) SendKey(VK_LEFT); }
+void MoveRight(int times) { for (int i = 0; i < times; ++i) SendKey(VK_RIGHT); }
+void RotateCW()           { SendKey('X'); }
+void RotateCCW()          { SendKey('Z'); }
+void HardDrop()           { SendKey(VK_SPACE); }
+void Hold()               { SendKey('C'); }
+
+// ========== ウィンドウキャプチャ =========
